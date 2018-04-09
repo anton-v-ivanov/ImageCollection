@@ -1,10 +1,10 @@
 ﻿namespace ImageCollections.Contracts.ImageCollections
 {
-    public class CollectionDeleteRequest
+    public class CollectionDeleteRequestInternal
     {
         public long Id { get; set; }
 
-        public CollectionDeleteRequest(long id)
+        public CollectionDeleteRequestInternal(long id)
         {
             Id = id;
         }

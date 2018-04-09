@@ -7,20 +7,28 @@ namespace ImageCollections.Service.Managers
 {
     public interface IImageCollectionManager
     {
-        Task<List<ImageCollection>> Search(CollectionSearchRequest request);
+        Task<List<ImageCollectionInternal>> GetCollectionsList(CollectionSearchRequestInternal request);
 
-        Task<ImageCollection> Get(CollectionGetRequest request);
+        Task<ImageCollectionInternal> GetCollection(CollectionGetRequestInternal request);
 
-        Task<ImageCollection> Create(CollectionCreateRequest request);
+        Task<ImageCollectionInternal> CreateCollection(CollectionCreateRequestInternal request);
 
-        Task<ImageCollection> Update(CollectionUpdateRequest request);
+        Task<UpdateDeleteResponseInternal> UpdateCollection(CollectionUpdateRequestInternal request);
 
-        Task<CollectionDeleteResponse> Delete(CollectionDeleteRequest request);
+        Task<UpdateDeleteResponseInternal> DeleteCollection(CollectionDeleteRequestInternal request);
 
-        Task<ImageInfo> Upload(UploadFileRequest request);
+        Task<ImageInfoInternal> UploadFile(UploadFileRequestInternal request);
 
-        Task<ImageInfo> GetImage(GetImageRequest request);
+        Task<ImageInfoInternal> GetImage(GetImageRequestInternal request);
 
-        Task<List<ImageInfo>> GetImageList(GetImageListRequest request);
+        Task<List<ImageInfoInternal>> GetImageList(GetImageListRequestInternal request);
+
+        Task<UpdateDeleteResponseInternal> UpdateImageInfo(UpdateImageInfoRequestInternal request);
+
+        Task<UpdateDeleteResponseInternal> DeleteImage(DeleteImageRequestInternal request);
+
+        Task<UpdateDeleteResponseInternal> AddImageToCollection(AddImageToCollectionRequestInternal request);
+
+        Task<UpdateDeleteResponseInternal> RemoveImageFromCollection(RemoveImageFromCollectionRequestInternal request);
     }
 }

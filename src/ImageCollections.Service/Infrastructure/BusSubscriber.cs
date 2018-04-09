@@ -19,14 +19,30 @@ namespace ImageCollections.Service.Infrastructure
 
         public IBus Subscribe()
         {
-            _bus.RespondAsync<CollectionSearchRequest, List<ImageCollection>>(request => _imageCollectionManager.Search(request));
-            _bus.RespondAsync<CollectionGetRequest, ImageCollection>(request => _imageCollectionManager.Get(request));
-            _bus.RespondAsync<CollectionCreateRequest, ImageCollection>(request => _imageCollectionManager.Create(request));
-            _bus.RespondAsync<CollectionUpdateRequest, ImageCollection>(request => _imageCollectionManager.Update(request));
-            _bus.RespondAsync<CollectionDeleteRequest, CollectionDeleteResponse>(request => _imageCollectionManager.Delete(request));
-            _bus.RespondAsync<UploadFileRequest, ImageInfo>(request => _imageCollectionManager.Upload(request));
-            _bus.RespondAsync<GetImageRequest, ImageInfo>(request => _imageCollectionManager.GetImage(request));
-            _bus.RespondAsync<GetImageListRequest, List<ImageInfo>>(request => _imageCollectionManager.GetImageList(request));
+            _bus.RespondAsync<CollectionSearchRequestInternal, List<ImageCollectionInternal>>(request => _imageCollectionManager.GetCollectionsList(request));
+
+            _bus.RespondAsync<CollectionGetRequestInternal, ImageCollectionInternal>(request => _imageCollectionManager.GetCollection(request));
+
+            _bus.RespondAsync<CollectionCreateRequestInternal, ImageCollectionInternal>(request => _imageCollectionManager.CreateCollection(request));
+
+            _bus.RespondAsync<CollectionUpdateRequestInternal, UpdateDeleteResponseInternal>(request => _imageCollectionManager.UpdateCollection(request));
+
+            _bus.RespondAsync<CollectionDeleteRequestInternal, UpdateDeleteResponseInternal>(request => _imageCollectionManager.DeleteCollection(request));
+
+            _bus.RespondAsync<UploadFileRequestInternal, ImageInfoInternal>(request => _imageCollectionManager.UploadFile(request));
+
+            _bus.RespondAsync<GetImageRequestInternal, ImageInfoInternal>(request => _imageCollectionManager.GetImage(request));
+
+            _bus.RespondAsync<GetImageListRequestInternal, List<ImageInfoInternal>>(request => _imageCollectionManager.GetImageList(request));
+
+            _bus.RespondAsync<UpdateImageInfoRequestInternal, UpdateDeleteResponseInternal>(request => _imageCollectionManager.UpdateImageInfo(request));
+
+            _bus.RespondAsync<DeleteImageRequestInternal, UpdateDeleteResponseInternal>(request => _imageCollectionManager.DeleteImage(request));
+
+            _bus.RespondAsync<AddImageToCollectionRequestInternal, UpdateDeleteResponseInternal>(request => _imageCollectionManager.AddImageToCollection(request));
+
+            _bus.RespondAsync<RemoveImageFromCollectionRequestInternal, UpdateDeleteResponseInternal>(request => _imageCollectionManager.RemoveImageFromCollection(request));
+
             return _bus;
         }
     }

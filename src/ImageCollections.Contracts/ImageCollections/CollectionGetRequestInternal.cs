@@ -1,10 +1,10 @@
 ﻿namespace ImageCollections.Contracts.ImageCollections
 {
-    public class CollectionGetRequest
+    public class CollectionGetRequestInternal
     {
         public long Id { get; set; }
 
-        public CollectionGetRequest(long id)
+        public CollectionGetRequestInternal(long id)
         {
             Id = id;
         }

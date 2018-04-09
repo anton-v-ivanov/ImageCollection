@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ImageCollections.WebApi.Configuration;
 using ImageCollections.WebApi.Managers;
 using ImageCollections.WebApi.Models;
@@ -25,7 +24,7 @@ namespace ImageCollections.WebApi.Controllers
         /// Get file content
         /// </summary>
         [HttpGet("{id}", Name = "GetImage")]
-        public async Task<IActionResult> Get(long id)
+        public async Task<IActionResult> GetImage(long id)
         {
             var fileInfo = await _imageManager.GetContent(id);
             if (fileInfo == null)
@@ -37,23 +36,15 @@ namespace ImageCollections.WebApi.Controllers
         /// <summary>
         /// Get file metadata
         /// </summary>
-        [HttpGet("{id}/info")]
+        [HttpGet("{id}/info", Name = "GetInfo")]
         public async Task<IActionResult> GetInfo(long id)
         {
             var response = await _imageManager.GetInfo(id);
             if (response == null)
                 return NotFound();
 
-            var imageInfo = new ImageInfo
-            {
-                Id = response.Id,
-                ContentType = response.ContentType,
-                Url = Url.Link("GetImage", new { id = response.Id }),
-                Name = response.Name,
-                Height = response.Height,
-                Weigth = response.Width
-            };
-            return Ok(imageInfo);
+            var result = ConvertImageInfoModel(response);
+            return Ok(result);
         }
 
         /// <summary>
@@ -75,23 +66,17 @@ namespace ImageCollections.WebApi.Controllers
             }
 
             var response = await _imageManager.Upload(file);
-            var imageInfo = new ImageInfo
-            {
-                Id = response.Id,
-                ContentType = response.ContentType,
-                Url = Url.Link("GetImage", new { id = response.Id }),
-                Name = response.Name,
-                Height = response.Height,
-                Weigth = response.Width
-            };
-            return Ok(imageInfo);
+            var result = ConvertImageInfoModel(response);
+            return CreatedAtRoute("GetImage", new { id = response.Id }, result);
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> UpdateName(UpdateImageRequest request)
+        [HttpPatch("{id}/info")]
+        public async Task<IActionResult> UpdateName(long id, [FromBody]UpdateImageRequest request)
         {
-            var result = await _imageManager.UpdateImageInfo(request);
-            return Ok(result);
+            var response = await _imageManager.UpdateImageInfo(id, request);
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
         }
 
         /// <summary>
@@ -100,8 +85,27 @@ namespace ImageCollections.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            await _imageManager.Delete(id);
-            return Ok();
+            var response = await _imageManager.Delete(id);
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
+        }
+
+        private ImageInfo ConvertImageInfoModel(Contracts.ImageInfos.ImageInfoInternal internalInfo)
+        {
+            return new ImageInfo
+            {
+                Id = internalInfo.Id,
+                ContentType = internalInfo.ContentType,
+                Url = Url.Link("GetImage", new { id = internalInfo.Id }),
+                Info = Url.Link("GetInfo", new { id = internalInfo.Id }),
+                Name = internalInfo.Name,
+                Height = internalInfo.Height,
+                Weigth = internalInfo.Width,
+                XResolution = internalInfo.XResolution,
+                YResolution = internalInfo.YResolution,
+                DateTime = internalInfo.DateTime,
+            };
         }
     }
 }

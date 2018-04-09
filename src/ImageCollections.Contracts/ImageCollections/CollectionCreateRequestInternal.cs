@@ -1,10 +1,10 @@
 ﻿namespace ImageCollections.Contracts.ImageCollections
 {
-    public class CollectionCreateRequest
+    public class CollectionCreateRequestInternal
     {
         public string Name { get; set; }
 
-        public CollectionCreateRequest(string name)
+        public CollectionCreateRequestInternal(string name)
         {
             Name = name;
         }

@@ -7,20 +7,28 @@ namespace ImageCollections.Service.Repositories
 {
     public interface IImageCollectionRepository
     {
-        Task<IEnumerable<ImageCollection>> Search(string name, int fetch, int offset);
+        Task<IEnumerable<ImageCollectionInternal>> GetCollectionsList(string name, int fetch, int offset);
 
-        Task<ImageCollection> GetCollection(long id);
+        Task<ImageCollectionInternal> GetCollection(long id);
 
-        Task<ImageCollection> Create(string name);
+        Task<ImageCollectionInternal> CreateCollection(string name);
 
-        Task<ImageCollection> Update(long id, string name);
+        Task UpdateCollection(long id, string name);
 
-        Task<CollectionDeleteResponse> Delete(long id);
+        Task DeleteCollection(long id);
 
-        Task<ImageInfo> UploadImage(string name, string content, string contentType, int height, int width);
+        Task<ImageInfoInternal> UploadImage(string name, string content, string contentType, int height, int width, string xResolution, string yResolution, string dateTime);
 
-        Task<ImageInfo> GetImage(long id);
+        Task<ImageInfoInternal> GetImage(long id);
 
-        Task<IEnumerable<ImageInfo>> GetImageList(string name, int fetch, int offset);
+        Task<IEnumerable<ImageInfoInternal>> GetImageList(string name, int fetch, int offset);
+
+        Task UpdateImageInfo(long id, string name);
+
+        Task AddImageToCollection(long collectionId, long imageId);
+
+        Task RemoveImageFromCollection(long collectionId, long imageId);
+
+        Task DeleteImage(long id);
     }
 }

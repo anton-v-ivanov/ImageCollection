@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using EasyNetQ;
 using ImageCollections.Contracts.ImageCollections;
 using ImageCollections.WebApi.Models;
-using AddImageToCollectionRequest = ImageCollections.WebApi.Models.AddImageToCollectionRequest;
-using ImageCollection = ImageCollections.Contracts.ImageCollections.ImageCollection;
 
 namespace ImageCollections.WebApi.Managers
 {
@@ -18,54 +15,59 @@ namespace ImageCollections.WebApi.Managers
             _bus = bus;
         }
 
-        public async Task<List<Models.ImageCollection>> Search(string name, int fetch, int offset)
+        public async Task<List<ImageCollectionInternal>> GetCollectionsList(string name, int fetch, int offset)
         {
-            var request = new CollectionSearchRequest(name, fetch, offset);
-            var response = await _bus.RequestAsync<CollectionSearchRequest, List<ImageCollection>>(request);
-            return response.Select(s => new Models.ImageCollection(s)).ToList();
+            var request = new CollectionSearchRequestInternal(name, fetch, offset);
+            var response = await _bus.RequestAsync<CollectionSearchRequestInternal, List<ImageCollectionInternal>>(request);
+            return response;
         }
 
-        public async Task<Models.ImageCollection> Get(long id)
+        public async Task<ImageCollectionInternal> GetCollection(long id)
         {
-            var request = new CollectionGetRequest(id);
-            var response = await _bus.RequestAsync<CollectionGetRequest, Contracts.ImageCollections.ImageCollection>(request);
+            var request = new CollectionGetRequestInternal(id);
+            var response = await _bus.RequestAsync<CollectionGetRequestInternal, ImageCollectionInternal>(request);
             // we have to pass empty value instead of null because of bug in EasyNetQ https://github.com/EasyNetQ/EasyNetQ/issues/111
-            return response.Id == 0 ? null : new Models.ImageCollection(response);
+            return response.Id == 0 ? null : response;
         }
 
-        public async Task<Models.ImageCollection> Create(CreateCollectionRequest createRequest)
+        public async Task<ImageCollectionInternal> CreateCollection(CreateCollectionRequest createRequest)
         {
-            var request = new CollectionCreateRequest(createRequest.Name);
-            var response = await _bus.RequestAsync<CollectionCreateRequest, ImageCollection>(request);
-            return new Models.ImageCollection(response);
-        }
-
-        public async Task<Models.ImageCollection> Update(long id, string name)
-        {
-            var request = new CollectionUpdateRequest(id, name);
-            var response = await _bus.RequestAsync<CollectionUpdateRequest, ImageCollection>(request);
-            return new Models.ImageCollection(response);
-        }
-
-        public async Task<CollectionDeleteResponse> Delete(long id)
-        {
-            var request = new CollectionDeleteRequest(id);
-            var response = await _bus.RequestAsync<CollectionDeleteRequest, CollectionDeleteResponse>(request);
+            var request = new CollectionCreateRequestInternal(createRequest.Name);
+            var response = await _bus.RequestAsync<CollectionCreateRequestInternal, ImageCollectionInternal>(request);
             return response;
         }
 
-        public async Task<RemoveImageFromCollectionResponse> RemoveImage(long collectionId, long imageId)
+        public async Task<UpdateDeleteActionResponse> UpdateCollection(long id, UpdateCollectionRequest updateCollectionRequest)
         {
-            var request = new RemoveImageFromCollectionRequest(collectionId, imageId);
-            var response = await _bus.RequestAsync<RemoveImageFromCollectionRequest, RemoveImageFromCollectionResponse>(request);
-            return response;
+            var collection = await GetCollection(id);
+            if(collection == null)
+                return new UpdateDeleteActionResponse(false, $"Collection with id {id} doesn't exists");
+
+            var request = new CollectionUpdateRequestInternal(id, updateCollectionRequest.Name);
+            var response = await _bus.RequestAsync<CollectionUpdateRequestInternal, UpdateDeleteResponseInternal>(request);
+            // we have to pass empty value instead of null because of bug in EasyNetQ https://github.com/EasyNetQ/EasyNetQ/issues/111
+            return new UpdateDeleteActionResponse(response);
         }
 
-        public async Task<ImageInfo> AddImageToCollection(long collectionId, AddImageToCollectionRequest addImageModel)
+        public async Task<UpdateDeleteActionResponse> DeleteCollection(long id)
         {
-            var request = new Contracts.ImageCollections.AddImageToCollectionRequest(collectionId, addImageModel.ImageId);
-            var response = await _bus.RequestAsync<Contracts.ImageCollections.AddImageToCollectionRequest, ImageInfo>(request);
-            return response;
+            var request = new CollectionDeleteRequestInternal(id);
+            var response = await _bus.RequestAsync<CollectionDeleteRequestInternal, UpdateDeleteResponseInternal>(request);
+            return new UpdateDeleteActionResponse(response);
+        }
+
+        public async Task<UpdateDeleteActionResponse> RemoveImageFromCollection(long collectionId, long imageId)
+        {
+            var request = new RemoveImageFromCollectionRequestInternal(collectionId, imageId);
+            var response = await _bus.RequestAsync<RemoveImageFromCollectionRequestInternal, UpdateDeleteResponseInternal>(request);
+            return new UpdateDeleteActionResponse(response);
+        }
+
+        public async Task<UpdateDeleteActionResponse> AddImageToCollection(long collectionId, AddImageToCollectionRequest addImageModel)
+        {
+            var request = new AddImageToCollectionRequestInternal(collectionId, addImageModel.ImageId);
+            var response = await _bus.RequestAsync<AddImageToCollectionRequestInternal, UpdateDeleteResponseInternal>(request);
+            return new UpdateDeleteActionResponse(response);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ImageCollections.WebApi.Managers;
 using ImageCollections.WebApi.Models;
@@ -27,7 +26,7 @@ namespace ImageCollections.WebApi.Controllers
         {
             if (select == 0)
                 select = 10;
-            var internalCollections = await _imageCollectionManager.Search(name, select, omit);
+            var internalCollections = await _imageCollectionManager.GetCollectionsList(name, select, omit);
 
             var imageCollections = new List<ImageCollection>(internalCollections.Count);
             foreach (var internalCollection in internalCollections)
@@ -40,7 +39,7 @@ namespace ImageCollections.WebApi.Controllers
 
                 foreach (var imageId in internalCollection.Images)
                 {
-                    var imageUrl = Url.Action("Get", "Image", imageId);
+                    var imageUrl = Url.Link("GetImage", new {id = imageId});
                     imageCollection.Images.Add(imageUrl);
                 }
                 imageCollections.Add(imageCollection);

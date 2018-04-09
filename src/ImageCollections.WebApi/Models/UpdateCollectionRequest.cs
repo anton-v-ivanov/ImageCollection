@@ -2,9 +2,9 @@
 
 namespace ImageCollections.WebApi.Models
 {
-    public class AddImageToCollectionRequest
+    public class UpdateCollectionRequest
     {
         [Required]
-        public long ImageId { get; set; }
+        public string Name { get; set; }
     }
 }

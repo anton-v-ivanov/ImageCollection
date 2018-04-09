@@ -15,7 +15,7 @@ namespace ImageCollections.WebApi.Models
             Images = new List<string>();
         }
 
-        public ImageCollection(Contracts.ImageCollections.ImageCollection internaCollection)
+        public ImageCollection(Contracts.ImageCollections.ImageCollectionInternal internaCollection)
         {
             Id = internaCollection.Id;
             Name = internaCollection.Name;

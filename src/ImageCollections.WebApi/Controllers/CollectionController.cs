@@ -25,11 +25,26 @@ namespace ImageCollections.WebApi.Controllers
         [HttpGet("{id}", Name="GetCollection")]
         public async Task<IActionResult> Get(long id)
         {
-            var collection = await _imageCollectionManager.Get(id);
-            if (collection == null)
+            var internalCollection = await _imageCollectionManager.GetCollection(id);
+            if (internalCollection == null)
                 return NotFound();
 
-            return Ok(collection);
+            var imageCollection = new ImageCollection
+            {
+                Id = internalCollection.Id,
+                Name = internalCollection.Name
+            };
+
+            if (internalCollection.Images != null)
+            {
+                foreach (var imageId in internalCollection.Images)
+                {
+                    var imageUrl = Url.Link("GetImage", new {id = imageId});
+                    imageCollection.Images.Add(imageUrl);
+                }
+            }
+
+            return Ok(imageCollection);
         }
 
         /// <summary>
@@ -38,18 +53,20 @@ namespace ImageCollections.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateCollectionRequest request)
         {
-            var response = await _imageCollectionManager.Create(request);
+            var response = await _imageCollectionManager.CreateCollection(request);
             return CreatedAtRoute("GetCollection", new { id = response.Id }, response);
         }
 
         /// <summary>
         /// Update collection
         /// </summary>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]string name)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(long id, [FromBody]UpdateCollectionRequest request)
         {
-            await _imageCollectionManager.Update(id, name);
-            return Ok();
+            var response = await _imageCollectionManager.UpdateCollection(id, request);
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
         }
 
         /// <summary>
@@ -59,21 +76,23 @@ namespace ImageCollections.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _imageCollectionManager.Delete(id);
-            return Ok();
+            var response = await _imageCollectionManager.DeleteCollection(id);
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
         }
 
         [HttpGet("{id}/images")]
         public async Task<IActionResult> GetImagesInCollection(long id)
         {
-            var collection = await _imageCollectionManager.Get(id);
+            var collection = await _imageCollectionManager.GetCollection(id);
             if (collection == null)
                 return NotFound();
 
             var result = new List<string>();
             foreach (var imageId in collection.Images)
             {
-                var imageUrl = Url.Action("Get", "Image", imageId);
+                var imageUrl = Url.Link("GetImage", new { id = imageId });
                 result.Add(imageUrl);
             }
             return Ok(result);
@@ -82,15 +101,19 @@ namespace ImageCollections.WebApi.Controllers
         [HttpPost("{collectionId}/images")]
         public async Task<IActionResult> AddImageToCollection(long collectionId, [FromBody]AddImageToCollectionRequest addImageModel)
         {
-            var result = await _imageCollectionManager.AddImageToCollection(collectionId, addImageModel);
-            return Ok(result);
+            var response = await _imageCollectionManager.AddImageToCollection(collectionId, addImageModel);
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
         }
 
         [HttpDelete("{collectionId}/images/{imageId}")]
         public async Task<IActionResult> RemoveImageFromCollection(long collectionId, long imageId)
         {
-            await _imageCollectionManager.RemoveImage(collectionId, imageId);
-            return Ok();
+            var response = await _imageCollectionManager.RemoveImageFromCollection(collectionId, imageId);
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
         }
     }
 }

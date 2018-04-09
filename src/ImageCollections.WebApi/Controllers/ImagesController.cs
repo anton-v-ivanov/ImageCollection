@@ -27,16 +27,20 @@ namespace ImageCollections.WebApi.Controllers
 
             var response = await _imageManager.GetList(name, fetch, offset);
             var result = new List<ImageInfo>();
-            foreach (var info in response)
+            foreach (var internalInfo in response)
             {
                 var imageInfo = new ImageInfo
                 {
-                    Id = info.Id,
-                    ContentType = info.ContentType,
-                    Url = Url.Link("GetImage", new { id = info.Id }),
-                    Name = info.Name,
-                    Height = info.Height,
-                    Weigth = info.Width
+                    Id = internalInfo.Id,
+                    ContentType = internalInfo.ContentType,
+                    Url = Url.Link("GetImage", new { id = internalInfo.Id }),
+                    Info = Url.Link("GetInfo", new { id = internalInfo.Id }),
+                    Name = internalInfo.Name,
+                    Height = internalInfo.Height,
+                    Weigth = internalInfo.Width,
+                    XResolution = internalInfo.XResolution,
+                    YResolution = internalInfo.YResolution,
+                    DateTime = internalInfo.DateTime,
                 };
                 result.Add(imageInfo);
             }
