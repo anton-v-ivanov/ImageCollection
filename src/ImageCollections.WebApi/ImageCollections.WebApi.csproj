@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Easynetq" Version="2.3.1" />
+    <PackageReference Include="Easynetq.Serilog" Version="2.3.1" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="7.4.3" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+    <PackageReference Include="serilog.Enrichers.Environment" Version="2.1.2" />
+    <PackageReference Include="serilog.Enrichers.Process" Version="2.0.1" />
+    <PackageReference Include="serilog.Enrichers.Thread" Version="3.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="2.6.1" />
+    <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageCollections.Contracts\ImageCollections.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="hosting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -1,1 +1,1 @@
-# ImageCollection
+Simple rest api file storage
