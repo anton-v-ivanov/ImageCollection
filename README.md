@@ -4,7 +4,7 @@ How to start from Visual Studio:
 1. Solution properties -> Startup project -> Choose "Start" for ImageCollections.Service + ImageCollections.WebApi
 2. Start solution
 
-Default port is 8959 (can be configured at hosting.json)
+Default port is 8959 (can be configured in hosting.json)
 
 ## Use case example
 
