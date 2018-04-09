@@ -74,9 +74,10 @@ Note: Image will be removed from all collections in case of deletion.
 `DELETE http://localhost:8959/api/collection/{Id}`
 
 ## Areas of improvements
-1. Exception handling
-2. Logging and metrics
-3. Refactoring of `ImageCollections.Service`
-4. Mappings using Automapper instead of manual
-5. Comments in code
-6. Swagger
+1. Tests
+2. Exception handling
+3. Swagger
+4. Logging and metrics
+5. Refactoring of `ImageCollections.Service`
+6. Mappings using Automapper instead of manual
+7. Comments in code
