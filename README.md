@@ -1,4 +1,4 @@
-#Simple rest api file storage
+# Simple rest api file storage
 
 How to start from Visual Studio:
 1. Solution properties -> Startup project -> Choose "Start" for ImageCollections.Service + ImageCollections.WebApi
@@ -6,24 +6,24 @@ How to start from Visual Studio:
 
 Default port is 8959.
 
-##Use case example
+## Use case example
 
-##Images
+## Images
 
-###Upload an image 
+### Upload an image 
 `POST http://localhost:8959/api/image`
 Request should be multipart/form-data with form parameter name "file" for file
 
-###Download the image by a link in the JSON
+### Download the image by a link in the JSON
 `GET http://localhost:8959/api/image/{id}`
 
-###Get image information (metadata)
+### Get image information (metadata)
 `GET http://localhost:8959/api/image/{id}/info`
 
-###Get list of images with metadata
+### Get list of images with metadata
 `GET http://localhost:8959/api/images`
 
-###Update image name
+### Update image name
 `PATCH http://localhost:8959/api/images/{id}/info`
 ```
 {
@@ -31,13 +31,13 @@ Request should be multipart/form-data with form parameter name "file" for file
 }
 ```
 
-###Delete image
+### Delete image
 `DELETE http://localhost:8959/api/images/{id}`
 Note: Image will be removed from all collections in case of deletion.
 
-##Collections
+## Collections
 
-###Create a collection
+### Create a collection
 `POST http://localhost:8959/api/collection`
 ```
 {
@@ -45,13 +45,13 @@ Note: Image will be removed from all collections in case of deletion.
 }
 ```
 
-###Get list of collections
+### Get list of collections
 `GET http://localhost:8959/api/collections`
 
-###Get list of images by a collection
+### Get list of images by a collection
 `GET http://localhost:8959/api/collection/{id}` OR `GET http://localhost:8959/api/collection/{id}/images`
 
-###Add an image to the collection
+### Add an image to the collection
 `POST http://localhost:8959/api/collection/{id}/images`
 ```
 {
@@ -59,10 +59,10 @@ Note: Image will be removed from all collections in case of deletion.
 }
 ```
 
-###Remove image from the collection
+### Remove image from the collection
 `DELETE http://localhost:8959/api/collection/{collectionId}/images/{imageId}`
 
-###Update name of collection
+### Update name of collection
 `PATCH http://localhost:8959/api/collection/{id}`
 ```
 {
@@ -70,5 +70,5 @@ Note: Image will be removed from all collections in case of deletion.
 }
 ```
 
-###Delete collection
+### Delete collection
 `DELETE http://localhost:8959/api/collection/{Id}`
