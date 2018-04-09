@@ -4,7 +4,7 @@ How to start from Visual Studio:
 1. Solution properties -> Startup project -> Choose "Start" for ImageCollections.Service + ImageCollections.WebApi
 2. Start solution
 
-Default port is 8959.
+Default port is 8959 (can be configured at hosting.json)
 
 ## Use case example
 
@@ -72,3 +72,11 @@ Note: Image will be removed from all collections in case of deletion.
 
 ### Delete collection
 `DELETE http://localhost:8959/api/collection/{Id}`
+
+## Areas of improvements
+1. Exception handling
+2. Logging and metrics
+3. Refactoring of `ImageCollections.Service`
+4. Mappings using Automapper instead of manual
+5. Comments in code
+6. Swagger
