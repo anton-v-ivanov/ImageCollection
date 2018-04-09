@@ -48,7 +48,7 @@ Note: Image will be removed from all collections in case of deletion.
 ### Get list of collections
 `GET http://localhost:8959/api/collections`
 
-### Get list of images by a collection
+### Get list of images in collection
 `GET http://localhost:8959/api/collection/{id}` OR `GET http://localhost:8959/api/collection/{id}/images`
 
 ### Add an image to the collection
