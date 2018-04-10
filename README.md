@@ -1,4 +1,4 @@
-# Simple rest api file storage
+# Images collections
 
 How to start from Visual Studio:
 1. Solution properties -> Startup project -> Choose "Start" for ImageCollections.Service + ImageCollections.WebApi
