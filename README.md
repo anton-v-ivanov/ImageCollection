@@ -1,6 +1,6 @@
 # Images collections
 
-How to start from Visual Studio:
+Start from Visual Studio:
 1. Solution properties -> Startup project -> Choose "Start" for ImageCollections.Service + ImageCollections.WebApi
 2. Start solution
 
